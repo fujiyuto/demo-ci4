@@ -47,12 +47,28 @@ class UserController extends Controller
 
     public function create()
     {
+        try {
+            
+            $result = $this->user_business->createUser($this->request->getJsonVar('user_name'), $this->request->getJsonVar('email'), $this->request->getJsonVar('password'), $this->request->getJsonVar('sex'));
 
+            return $this->respond($result, 200);
+
+        } catch (\Exception $e) {
+            throw $e;
+        }
     }
 
     public function edit(int $id)
     {
+        try {
+            
+            $result = $this->user_business->createUser($this->request->getJsonVar('user_name'), $this->request->getJsonVar('email'), $this->request->getJsonVar('password'), $this->request->getJsonVar('sex'));
 
+            return $this->respond($result, 200);
+
+        } catch (\Exception $e) {
+            throw $e;
+        }
     }
 
     public function delete(int $id)

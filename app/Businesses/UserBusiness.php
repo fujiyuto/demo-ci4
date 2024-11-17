@@ -14,7 +14,7 @@ class UserBusiness {
         $this->user_model = model(UserModel::class);
     }
 
-    public function getUser(int|null $id = null)
+    public function getUser(int|null $id = null): array
     {
         $response_data = [];
         if ( !$id ) {
@@ -56,5 +56,22 @@ class UserBusiness {
             ];
             return $response_data;
         }
+    }
+
+    public function createUser(string $user_name, string $email, string $password, string $sex): array
+    {
+        $insert_data = [
+            'user_name' => $user_name,
+            'email'     => $email,
+            'password'  => password_hash($password, PASSWORD_DEFAULT),
+            'sex'       => $sex
+        ];
+
+        if ( !$this->user_model->insert($insert_data, false) ) {
+            log_message('debug', __CLASS__.'クラスの'.__LINE__.'行目でエラーが出てます。');
+            throw new DatabaseException('エラーです');
+        }
+
+        return ['ok' => true];
     }
 }

@@ -10,7 +10,7 @@ class UserModel extends Model
     const MEN = '1';
     const WOMEN = '2';
     const SEX_DICT = [
-        self::MEN => '男',
+        self::MEN   => '男',
         self::WOMEN => '女'
     ];
 
@@ -20,7 +20,7 @@ class UserModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['user_name', 'email', 'password', 'sex', 'created_at'];
+    protected $allowedFields    = ['user_name', 'email', 'password', 'sex', 'created_at', 'updated_at'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;

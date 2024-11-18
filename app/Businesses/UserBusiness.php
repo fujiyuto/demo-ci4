@@ -74,4 +74,35 @@ class UserBusiness {
 
         return ['ok' => true];
     }
+
+    public function updateUser(int $id, string $user_name, string $sex): array
+    {
+        $user = $this->user_model->find($id);
+        if ( !$user ) {
+            log_message('debug', __CLASS__.'クラスの'.__LINE__.'行目でエラーが出てます。');
+            throw new DatabaseException('エラーです');
+        }
+
+        $update_data = [
+            'user_name' => $user_name,
+            'sex'       => $sex
+        ];
+
+        if ( !$this->user_model->update($id, $update_data) ) {
+            log_message('debug', __CLASS__.'クラスの'.__LINE__.'行目でエラーが出てます。');
+            throw new DatabaseException('エラーです');
+        }
+
+        return ['ok' => true];
+    }
+
+    public function deleteUser(int $id): array
+    {
+        if ( !$this->user_model->delete($id) ) {
+            log_message('debug', __CLASS__.'クラスの'.__LINE__.'行目でエラーが出てます。');
+            throw new DatabaseException('エラーです');
+        }
+
+        return ['ok' => true];
+    }
 }

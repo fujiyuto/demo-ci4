@@ -8,15 +8,17 @@ use CodeIgniter\Controller;
 use App\Businesses\UserBusiness;
 use CodeIgniter\API\ResponseTrait;
 
-class UserController extends Controller
+class UserController extends BaseController
 {
     use ResponseTrait;
 
     private UserBusiness $user_business;
+    public $session;
 
     public function __construct()
     {
         $this->user_business = new UserBusiness();
+        $this->session = session();
     }
 
     public function index()
@@ -76,6 +78,32 @@ class UserController extends Controller
         try {
 
             $result = $this->user_business->deleteUser($id);
+
+            return $this->respond($result, 200);
+
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    public function login()
+    {
+        try {
+            
+            $result = $this->user_business->loginUser($this->request->getJsonVar('user_name'), $this->request->getJsonVar('password'));
+
+            return $this->respond($result, 200);
+
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    public function logout()
+    {
+        try {
+
+            $result = $this->user_business->logoutUser();
 
             return $this->respond($result, 200);
 

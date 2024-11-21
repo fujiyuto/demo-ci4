@@ -18,6 +18,9 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], static function ($
     $routes->post('users', 'UserController::create');
     $routes->patch('users/(:num)', 'UserController::edit/$1');
     $routes->delete('users/(:num)', 'UserController::delete/$1');
+
+    $routes->post('login', 'UserController::login');
+    $routes->post('logout', 'UserController::logout');
 });
 
 // $routes->get('api/users', 'Api\UserController::index');

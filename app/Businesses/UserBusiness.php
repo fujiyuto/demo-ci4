@@ -105,4 +105,20 @@ class UserBusiness {
 
         return ['ok' => true];
     }
+
+    public function loginUser(string $user_name, string $password): array
+    {
+        $hash_pwd = password_hash($password, PASSWORD_DEFAULT);
+        if ( !$user = $this->user_model->where('user_name', $user_name)->where('password', $hash_pwd)->first() ) {
+            log_message('debug', __CLASS__.'クラスの'.__LINE__.'行目でエラーが出てます。');
+            throw new DatabaseException('エラーです');
+        }
+
+        return ['ok' => true];
+    }
+
+    public function logoutUser(): array
+    {
+        return ['ok' => true];
+    }
 }

@@ -8,10 +8,12 @@ use DateTime;
 
 class UserBusiness {
     private UserModel $user_model;
+    public $session;
 
     public function __construct()
     {
         $this->user_model = model(UserModel::class);
+        $this->session    = session();
     }
 
     public function getUser(int|null $id = null): array
@@ -108,11 +110,26 @@ class UserBusiness {
 
     public function loginUser(string $user_name, string $password): array
     {
-        $hash_pwd = password_hash($password, PASSWORD_DEFAULT);
-        if ( !$user = $this->user_model->where('user_name', $user_name)->where('password', $hash_pwd)->first() ) {
+        if ( !$user = $this->user_model->where('user_name', $user_name)->first() ) {
             log_message('debug', __CLASS__.'クラスの'.__LINE__.'行目でエラーが出てます。');
             throw new DatabaseException('エラーです');
         }
+
+        if ( !password_verify($password, $user['password']) ) {
+            log_message('debug', __CLASS__.'クラスの'.__LINE__.'行目でエラーが出てます。');
+            throw new DatabaseException('パスワードが間違ってます');
+        }
+
+        // セッションIDの再生成
+        $this->session->regenerate();
+
+        // セッションにユーザーデータセット
+        $sess_data = [
+            'id'        => $user['id'],
+            'user_name' => $user['user_name'],
+            'email'     => $user['email']
+        ];
+        $this->session->set($sess_data);
 
         return ['ok' => true];
     }

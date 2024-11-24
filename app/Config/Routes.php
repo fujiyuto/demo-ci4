@@ -21,6 +21,7 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], static function ($
 
     $routes->post('login', 'UserController::login');
     $routes->post('logout', 'UserController::logout');
+    $routes->get('check-auth', 'UserController::check_auth');
 });
 
 // $routes->get('api/users', 'Api\UserController::index');

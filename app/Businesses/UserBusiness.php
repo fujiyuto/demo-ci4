@@ -6,7 +6,8 @@ use App\Models\UserModel;
 use CodeIgniter\Database\Exceptions\DatabaseException;
 use DateTime;
 
-class UserBusiness {
+class UserBusiness
+{
     private UserModel $user_model;
     public $session;
 
@@ -19,9 +20,9 @@ class UserBusiness {
     public function getUser(int|null $id = null): array
     {
         $response_data = [];
-        if ( !$id ) {
+        if (!$id) {
             $users = $this->user_model->findAll();
-            if ( !$users ) {
+            if (!$users) {
                 log_message('debug', __CLASS__.'クラスの'.__LINE__.'行目でエラーが出てます。');
                 throw new DatabaseException('エラーです');
             }
@@ -38,7 +39,7 @@ class UserBusiness {
         } else {
 
             $user = $this->user_model->find($id);
-            if ( !$user ) {
+            if (!$user) {
                 log_message('debug', __CLASS__.'クラスの'.__LINE__.'行目でエラーが出てます。');
                 throw new DatabaseException('エラーです');
             }
@@ -69,7 +70,7 @@ class UserBusiness {
             'sex'       => $sex
         ];
 
-        if ( !$this->user_model->insert($insert_data, false) ) {
+        if (!$this->user_model->insert($insert_data, false)) {
             log_message('debug', __CLASS__.'クラスの'.__LINE__.'行目でエラーが出てます。');
             throw new DatabaseException('エラーです');
         }
@@ -80,7 +81,7 @@ class UserBusiness {
     public function updateUser(int $id, string $user_name, string $sex): array
     {
         $user = $this->user_model->find($id);
-        if ( !$user ) {
+        if (!$user) {
             log_message('debug', __CLASS__.'クラスの'.__LINE__.'行目でエラーが出てます。');
             throw new DatabaseException('エラーです');
         }
@@ -90,7 +91,7 @@ class UserBusiness {
             'sex'       => $sex
         ];
 
-        if ( !$this->user_model->update($id, $update_data) ) {
+        if (!$this->user_model->update($id, $update_data)) {
             log_message('debug', __CLASS__.'クラスの'.__LINE__.'行目でエラーが出てます。');
             throw new DatabaseException('エラーです');
         }
@@ -100,7 +101,7 @@ class UserBusiness {
 
     public function deleteUser(int $id): array
     {
-        if ( !$this->user_model->delete($id) ) {
+        if (!$this->user_model->delete($id)) {
             log_message('debug', __CLASS__.'クラスの'.__LINE__.'行目でエラーが出てます。');
             throw new DatabaseException('エラーです');
         }
@@ -110,12 +111,12 @@ class UserBusiness {
 
     public function loginUser(string $user_name, string $password): array
     {
-        if ( !$user = $this->user_model->where('user_name', $user_name)->first() ) {
+        if (!$user = $this->user_model->where('user_name', $user_name)->first()) {
             log_message('debug', __CLASS__.'クラスの'.__LINE__.'行目でエラーが出てます。');
             throw new DatabaseException('エラーです');
         }
 
-        if ( !password_verify($password, $user['password']) ) {
+        if (!password_verify($password, $user['password'])) {
             log_message('debug', __CLASS__.'クラスの'.__LINE__.'行目でエラーが出てます。');
             throw new DatabaseException('パスワードが間違ってます');
         }
@@ -127,7 +128,8 @@ class UserBusiness {
         $sess_data = [
             'id'        => $user['id'],
             'user_name' => $user['user_name'],
-            'email'     => $user['email']
+            'email'     => $user['email'],
+            'is_auth'   => true
         ];
         $this->session->set($sess_data);
 
@@ -136,6 +138,23 @@ class UserBusiness {
 
     public function logoutUser(): array
     {
+        $this->session->destroy();
+
         return ['ok' => true];
+    }
+
+    public function checkAuth(): array
+    {
+        if ( $this->session->get('is_auth') ) {
+            return [
+                'id' => $this->session->get('id'),
+                'user_name' => $this->session->get('user_name'),
+                'email' => $this->session->get('email'),
+            ];
+        } else {
+            return [
+                'message' => 'No logged in.'
+            ];
+        }
     }
 }

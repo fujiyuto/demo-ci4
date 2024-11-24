@@ -111,4 +111,17 @@ class UserController extends BaseController
             throw $e;
         }
     }
+
+    public function check_auth()
+    {
+        try {
+
+            $result = $this->user_business->checkAuth();
+
+            return $this->respond($result, 200);
+
+        } catch (\Exception $e) {
+
+        }
+    }
 }

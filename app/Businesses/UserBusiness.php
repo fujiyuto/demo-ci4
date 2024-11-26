@@ -10,11 +10,13 @@ class UserBusiness
 {
     private UserModel $user_model;
     public $session;
+    public $validation;
 
     public function __construct()
     {
         $this->user_model = model(UserModel::class);
         $this->session    = session();
+        $this->validation = service('validation');
     }
 
     public function getUser(int|null $id = null): array

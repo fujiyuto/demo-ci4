@@ -41,4 +41,22 @@ class Validation extends BaseConfig
     // --------------------------------------------------------------------
     // Rules
     // --------------------------------------------------------------------
+    public array $login = [
+        'user_name' => 'required|max_length[30]',
+        'password'  => 'required|max_length[255]'
+    ];
+
+    // --------------------------------------------------------------------
+    // Error Messages
+    // --------------------------------------------------------------------
+    public array $login_errors = [
+        'user_name' => [
+            'required'   => '{field}は必須です',
+            'max_length' => '{field}は30文字までです'
+        ],
+        'password' => [
+            'required'   => '{field}は必須です',
+            'max_length' => '{field}は30文字までです'
+        ]
+    ];
 }

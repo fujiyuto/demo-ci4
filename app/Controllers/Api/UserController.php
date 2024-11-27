@@ -14,14 +14,10 @@ class UserController extends BaseController
     use ResponseTrait;
 
     private UserBusiness $user_business;
-    public $session;
-    public $validation;
 
     public function __construct()
     {
         $this->user_business = new UserBusiness();
-        $this->session       = session();
-        $this->validation    = service('validation');
     }
 
     public function index()
@@ -92,17 +88,8 @@ class UserController extends BaseController
     public function login()
     {
         try {
-
-            $data = [
-                'user_name' => $this->request->getJsonVar('user_name'),
-                'password'  => $this->request->getJsonVar('password')
-            ];
-
             // バリデーション
-            if ( !$this->validation->run('login') ) {
-                log_message('debug', __CLASS__.'クラスの'.__LINE__.'行目でエラーが出てます。');
-                throw new ValidationException($this->validator->getErrors());
-            }
+            $this->validateRequest('login');
             
             $result = $this->user_business->loginUser($this->request->getJsonVar('user_name'), $this->request->getJsonVar('password'));
 

@@ -7,6 +7,7 @@ use CodeIgniter\HTTP\CLIRequest;
 use CodeIgniter\HTTP\IncomingRequest;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
+use CodeIgniter\Validation\Exceptions\ValidationException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -27,6 +28,8 @@ abstract class BaseController extends Controller
      * @var CLIRequest|IncomingRequest
      */
     protected $request;
+    protected $session;
+    protected $validation;
 
     /**
      * An array of helpers to be loaded automatically upon
@@ -54,5 +57,23 @@ abstract class BaseController extends Controller
         // Preload any models, libraries, etc, here.
 
         // E.g.: $this->session = \Config\Services::session();
+
+        $this->session       = session();
+        $this->validation    = service('validation');
+    }
+
+    protected function validateRequest(string $rule): void
+    {
+        // バリデーションルールのセット
+        $this->validation->setRuleGroup($rule);
+        if ( !$this->validation->withRequest($this->request)->run() ) {
+            log_message('debug', __CLASS__.'クラスの'.__LINE__.'行目でエラーが出てます。');
+            $errors = $this->validation->getErrors();
+            $error_message = '';
+            foreach ($errors as $e) {
+                $error_message .= $e . '\n';
+            }
+            throw new ValidationException();
+        }
     }
 }

@@ -140,6 +140,12 @@ class UserBusiness
 
     public function logoutUser(): array
     {
+        // ログイン中か検証
+        if ( !$this->session->get('is_auth') ) {
+            log_message('debug', __CLASS__.'クラスの'.__LINE__.'行目でエラーが出てます。');
+            throw new DatabaseException('認証ユーザーではありません。');
+        }
+
         $this->session->destroy();
 
         return ['ok' => true];

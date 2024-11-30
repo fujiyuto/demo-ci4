@@ -49,7 +49,9 @@ class UserController extends BaseController
     public function create()
     {
         try {
-            
+            // バリデーション
+            $this->validateRequest('create_user');
+
             $result = $this->user_business->createUser($this->request->getJsonVar('user_name'), $this->request->getJsonVar('email'), $this->request->getJsonVar('password'), $this->request->getJsonVar('sex'));
 
             return $this->respond($result, 200);

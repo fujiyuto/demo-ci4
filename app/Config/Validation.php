@@ -41,22 +41,52 @@ class Validation extends BaseConfig
     // --------------------------------------------------------------------
     // Rules
     // --------------------------------------------------------------------
+    public array $create_user = [
+        'user_name' => 'required|max_length[30]|is_unique',
+        'email'     => 'required|email',
+        'password'  => 'required|max_length[30]|password',
+        'sex'       => 'required|in_list[1,2]'
+    ];
+
     public array $login = [
-        'user_name' => 'required|max_length[30]',
-        'password'  => 'required|max_length[255]'
+        'user_name' => 'required|max_length[30]|is_unique',
+        'password'  => 'required|max_length[30]|password'
     ];
 
     // --------------------------------------------------------------------
     // Error Messages
     // --------------------------------------------------------------------
-    public array $login_errors = [
+    public array $create_user_errors = [
         'user_name' => [
             'required'   => '{field}は必須です',
-            'max_length' => '{field}は30文字までです'
+            'max_length' => '{field}は30文字までです',
+            'is_unique'  => '{field}は一意である必要があります'
+        ],
+        'email' => [
+            'required' => '{field}は必須です',
+            'email'    => 'メールアドレスの形式が正しくありません'
         ],
         'password' => [
             'required'   => '{field}は必須です',
-            'max_length' => '{field}は30文字までです'
+            'max_length' => '{field}は30文字までです',
+            'password'   => 'パスワードの形式が正しくありません'
+        ],
+        'sex' => [
+            'required' => '{field}は必須です',
+            'in_list'  => '{field}が正しくありません'
+        ]
+    ];
+
+    public array $login_errors = [
+        'user_name' => [
+            'required'   => '{field}は必須です',
+            'max_length' => '{field}は30文字までです',
+            'is_unique'  => '{field}は一意である必要があります'
+        ],
+        'password' => [
+            'required'   => '{field}は必須です',
+            'max_length' => '{field}は30文字までです',
+            'password'   => 'パスワードの形式が正しくありません'
         ]
     ];
 }

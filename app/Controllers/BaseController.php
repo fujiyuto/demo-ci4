@@ -58,8 +58,8 @@ abstract class BaseController extends Controller
 
         // E.g.: $this->session = \Config\Services::session();
 
-        $this->session       = session();
-        $this->validation    = service('validation');
+        $this->session    = session();
+        $this->validation = service('validation');
     }
 
     protected function validateRequest(string $rule): void

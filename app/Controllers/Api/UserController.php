@@ -50,7 +50,10 @@ class UserController extends BaseController
     {
         try {
             // バリデーション
-            $this->validateRequest('create_user');
+            $is_valid = $this->validateRequest('create_user');
+            if ( !$is_valid['ok'] ) {
+                return $this->failValidationErrors($is_valid['error_msg']);
+            }
 
             $result = $this->user_business->createUser($this->request->getJsonVar('user_name'), $this->request->getJsonVar('email'), $this->request->getJsonVar('password'), $this->request->getJsonVar('sex'));
 
@@ -91,7 +94,12 @@ class UserController extends BaseController
     {
         try {
             // バリデーション
-            $this->validateRequest('login');
+            $is_valid = $this->validateRequest('login');
+            if ( !$is_valid['ok'] ) {
+                return $this->failValidationErrors($is_valid['error_msg']);
+            }
+
+            // 
             
             $result = $this->user_business->loginUser($this->request->getJsonVar('user_name'), $this->request->getJsonVar('password'));
 

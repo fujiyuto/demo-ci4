@@ -15,7 +15,7 @@ class UserSeeder extends Seeder
             $data[] = [
                 'user_name' => 'test_user'.$i,
                 'email'     => 'test'.$i.'@gmail.com',
-                'password'  => password_hash('password', PASSWORD_DEFAULT),
+                'password'  => password_hash('Password1', PASSWORD_DEFAULT),
                 'sex'       => $i < 2 ? UserModel::MEN : UserModel::WOMEN,
             ];
         }

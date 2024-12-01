@@ -62,18 +62,25 @@ abstract class BaseController extends Controller
         $this->validation = service('validation');
     }
 
-    protected function validateRequest(string $rule): void
+    protected function validateRequest(string $rule)
     {
         // バリデーションルールのセット
         $this->validation->setRuleGroup($rule);
         if ( !$this->validation->withRequest($this->request)->run() ) {
             log_message('debug', __CLASS__.'クラスの'.__LINE__.'行目でエラーが出てます。');
             $errors = $this->validation->getErrors();
-            $error_message = '';
+            $error_message = [];
             foreach ($errors as $e) {
-                $error_message .= $e . '\n';
+                $error_message[] = $e;
             }
-            throw new ValidationException();
+            return [
+                'ok' => false,
+                'error_msg' => $error_message
+            ];
         }
+
+        return [
+            'ok' => true
+        ];
     }
 }

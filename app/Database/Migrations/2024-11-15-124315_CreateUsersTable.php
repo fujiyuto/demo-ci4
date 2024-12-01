@@ -12,31 +12,32 @@ class CreateUsersTable extends Migration
         $this->forge->addField('id');
         $this->forge->addField([
             'user_name' => [
-                'type' => 'VARCHAR',
+                'type'       => 'VARCHAR',
                 'constraint' => '30',
-                'comment' => 'ユーザー名'
+                'comment'    => 'ユーザー名',
+                'unique'     => true
             ],
             'email' => [
-                'type' => 'VARCHAR',
+                'type'       => 'VARCHAR',
                 'constraint' => '100',
-                'comment' => 'メールアドレス'
+                'comment'    => 'メールアドレス'
             ],
             'password' => [
-                'type' => 'VARCHAR',
+                'type'       => 'VARCHAR',
                 'constraint' => '255',
-                'comment' => 'パスワード'
+                'comment'    => 'パスワード'
             ],
             'sex' => [
-                'type' => 'ENUM',
+                'type'       => 'ENUM',
                 'constraint' => ['1', '2'],
-                'comment' => '性別'
+                'comment'    => '性別（1:男性, 2:女性）'
             ],
             'created_at' => [
-                'type' => 'TIMESTAMP',
+                'type'    => 'TIMESTAMP',
                 'default' => new RawSql('CURRENT_TIMESTAMP')
             ],
             'updated_at' => [
-                'type' => 'TIMESTAMP',
+                'type'    => 'TIMESTAMP',
                 'default' => new RawSql('CURRENT_TIMESTAMP')
             ],
         ]);

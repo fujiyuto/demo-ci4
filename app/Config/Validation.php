@@ -2,6 +2,7 @@
 
 namespace Config;
 
+use App\Validation\PasswordValidation;
 use CodeIgniter\Config\BaseConfig;
 use CodeIgniter\Validation\StrictRules\CreditCardRules;
 use CodeIgniter\Validation\StrictRules\FileRules;
@@ -25,6 +26,7 @@ class Validation extends BaseConfig
         FormatRules::class,
         FileRules::class,
         CreditCardRules::class,
+        PasswordValidation::class,
     ];
 
     /**
@@ -42,51 +44,15 @@ class Validation extends BaseConfig
     // Rules
     // --------------------------------------------------------------------
     public array $create_user = [
-        'user_name' => 'required|max_length[30]|is_unique',
-        'email'     => 'required|email',
-        'password'  => 'required|max_length[30]|password',
-        'sex'       => 'required|in_list[1,2]'
+        'user_name' => 'required|max_length[30]|is_unique[users.user_name]',
+        'email'            => 'required|valid_email',
+        'password'         => 'required|max_length[32]|password',
+        'password_confirm' => 'required|matches[password]',
+        'sex'              => 'required|in_list[1,2]'
     ];
 
     public array $login = [
-        'user_name' => 'required|max_length[30]|is_unique',
+        'user_name' => 'required|max_length[30]|is_not_unique[users.user_name]',
         'password'  => 'required|max_length[30]|password'
-    ];
-
-    // --------------------------------------------------------------------
-    // Error Messages
-    // --------------------------------------------------------------------
-    public array $create_user_errors = [
-        'user_name' => [
-            'required'   => '{field}は必須です',
-            'max_length' => '{field}は30文字までです',
-            'is_unique'  => '{field}は一意である必要があります'
-        ],
-        'email' => [
-            'required' => '{field}は必須です',
-            'email'    => 'メールアドレスの形式が正しくありません'
-        ],
-        'password' => [
-            'required'   => '{field}は必須です',
-            'max_length' => '{field}は30文字までです',
-            'password'   => 'パスワードの形式が正しくありません'
-        ],
-        'sex' => [
-            'required' => '{field}は必須です',
-            'in_list'  => '{field}が正しくありません'
-        ]
-    ];
-
-    public array $login_errors = [
-        'user_name' => [
-            'required'   => '{field}は必須です',
-            'max_length' => '{field}は30文字までです',
-            'is_unique'  => '{field}は一意である必要があります'
-        ],
-        'password' => [
-            'required'   => '{field}は必須です',
-            'max_length' => '{field}は30文字までです',
-            'password'   => 'パスワードの形式が正しくありません'
-        ]
     ];
 }
